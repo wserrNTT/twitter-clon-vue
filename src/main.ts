@@ -5,7 +5,7 @@ import { router } from '@/router';
 import { createPinia } from 'pinia';
 
 // Styles
-import '@/style.scss';
+import '@/assets/style.scss';
 
 const app = createApp(App);
 const pinia = createPinia();
