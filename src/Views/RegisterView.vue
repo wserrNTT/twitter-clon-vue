@@ -1,22 +1,24 @@
 <script lang="ts" setup>
+import { useRouter } from "vue-router";
 import { Icon } from "@iconify/vue"
-import logo from "/favicon.jpg"
+
+const router = useRouter();
 </script>
 
 <template>
   <div class="register-container">
     <div class="x-container">
-      <img class="logo" :src="logo" alt="x-logo">
+      <Icon class="icon" icon="simple-icons:x" color="#e7e9ea" />
     </div>
     <div class="info-container">
       <h2>Lo que está pasando ahora</h2>
       <div class="buttons-container">
-        <h3>únete Hoy</h3>
-        <button class="empty-button">
+        <h3>Únete Hoy</h3>
+        <button type="button" class="empty-button">
           <icon icon="devicon:google" width="1.6rem" />
           Registrate con Google
         </button>
-        <button class="empty-button">
+        <button type="button" class="empty-button">
           <Icon icon="bi:apple" width="1.6rem" />
           Registrate con Apple
         </button>
@@ -25,36 +27,40 @@ import logo from "/favicon.jpg"
           <span>o</span>
           <span class="line"></span>
         </div>
-        <button class="full-button">Crear Cuenta</button>
+        <button type="button" class="full-button">Crear Cuenta</button>
         <p class="terms">
-          Al registrarte, aceptas los<span class="highlighted">Términos de servicio
-          </span>y la <span class="highlighted">Política de privacidad</span>, incluída la política de <span
-            class="highlighted">Uso de
-            Cookies</span>.
+          Al registrarte, aceptas los<a href="https://twitter.com/tos" class="highlighted">Términos de servicio
+          </a>y la <a href="https://twitter.com/privacy" class="highlighted">Política de privacidad</a>, incluída la
+          política de <a href="https://help.twitter.com/rules-and-policies/twitter-cookies" class="highlighted">Uso de
+            Cookies</a>.
         </p>
         <h4 class="login-question">¿Ya tienes una cuenta?</h4>
-        <button class="login-button">Iniciar sesión</button>
+        <button type="button" class="login-button" @click="() => router.push({ name: 'home' })">Iniciar sesión</button>
       </div>
     </div>
     <footer>
-      <a href="">información</a>
-      <a href="">Descargar la app de X</a>
-      <a href="">Centro de Ayuda</a>
-      <a href="">Condiciones de Servicio</a>
-      <a href="">Política de Privacidad</a>
-      <a href="">Política de Cookies</a>
-      <a href="">Accesibilidad</a>
-      <a href="">Información de anuncios</a>
-      <a href="">Blog</a>
-      <a href="">Estado</a>
-      <a href="">Empleos</a>
-      <a href="">Recursos para Marcas</a>
-      <a href="">Publicidad</a>
-      <a href="">Marketing</a>
-      <a href="">X para empresas</a>
-      <a href="">Desarrolladores</a>
-      <a href="">Guía</a>
-      <a href="">Configuración</a>
+      <a href="https://about.twitter.com/">información</a>
+      <a href="https://help.twitter.com/using-x/download-the-x-app">Descargar la app de X</a>
+      <a href="https://help.twitter.com/">Centro de Ayuda</a>
+      <a href="https://twitter.com/tos">Condiciones de Servicio</a>
+      <a href="https://twitter.com/privacy">Política de Privacidad</a>
+      <a href="https://support.twitter.com/articles/20170514">Política de Cookies</a>
+      <a href="https://help.twitter.com/resources/accessibility">Accesibilidad</a>
+      <a
+        href="https://business.twitter.com/en/help/troubleshooting/how-twitter-ads-work.html?ref=web-twc-ao-gbl-adsinfo&utm_source=twc&utm_medium=web&utm_campaign=ao&utm_content=adsinfo">Información
+        de anuncios</a>
+      <a href="https://blog.twitter.com/">Blog</a>
+      <a href="https://status.twitterstat.us/">Estado</a>
+      <a href="https://careers.twitter.com/">Empleos</a>
+      <a href="https://about.twitter.com/press/brand-assets">Recursos para Marcas</a>
+      <a href="https://ads.twitter.com/?ref=gl-tw-tw-twitter-advertise">Publicidad</a>
+      <a href="https://marketing.twitter.com/">Marketing</a>
+      <a
+        href="https://business.twitter.com/?ref=web-twc-ao-gbl-twitterforbusiness&utm_source=twc&utm_medium=web&utm_campaign=ao&utm_content=twitterforbusiness">X
+        para empresas</a>
+      <a href="https://developer.twitter.com/">Desarrolladores</a>
+      <a href="https://twitter.com/i/directory/profiles">Guía</a>
+      <a href="https://twitter.com/settings">Configuración</a>
       <span>© 2023 X Corp</span>
     </footer>
   </div>
@@ -63,7 +69,7 @@ import logo from "/favicon.jpg"
 <style lang="scss" scoped>
 .register-container {
   display: grid;
-  grid-template-columns: 60% 40%;
+  grid-template-columns: auto 760px;
   grid-template-rows: auto 80px;
   height: 100%;
 
@@ -71,9 +77,10 @@ import logo from "/favicon.jpg"
     display: flex;
     justify-content: center;
     align-items: center;
+    min-width: 140px;
 
-    .logo {
-      width: 500px;
+    .icon {
+      width: clamp(130px, 80%, 350px);
       height: auto;
     }
   }
@@ -84,7 +91,7 @@ import logo from "/favicon.jpg"
     row-gap: 10px;
     justify-content: center;
     align-items: flex-start;
-    padding-right: 30%;
+    padding: 0 30% 0 50px;
     color: #e7e9ea;
 
     h2 {
@@ -115,6 +122,7 @@ import logo from "/favicon.jpg"
         justify-content: center;
         align-items: center;
         column-gap: 5px;
+        cursor: pointer;
       }
 
       .separator {
@@ -129,33 +137,57 @@ import logo from "/favicon.jpg"
         }
       }
 
+      .empty-button:hover {
+        background-color: #dfdfdf;
+        transform: background-color ease-in 0.3s;
+      }
+
       .full-button {
         background-color: #1d9bf0;
         color: white;
+
+        &:hover {
+          background-color: #158ddd;
+          transform: background-color ease-in 0.3s;
+        }
       }
 
       .terms {
         color: #71767b;
 
         .highlighted {
-          color: #1d9bf0
+          color: #1d9bf0;
+          text-decoration: none;
+
+          &:hover {
+            text-decoration: underline;
+          }
+        }
+      }
+
+      .login-question {
+        margin-top: 10px;
+      }
+
+      .login-button {
+        border: solid 1px #71767b;
+        border-radius: 32px;
+        padding: 10px 15px;
+        font-size: 1.4rem;
+        font-weight: bold;
+        align-self: stretch;
+        background-color: transparent;
+        color: #1d9bf0;
+
+        &:hover {
+          background-color: #041c2c;
+          transform: background-color ease-in 0.3s;
         }
       }
     }
   }
 
-  .login-question {
-    margin-top: 10px;
-  }
 
-  .login-button {
-    border: none;
-    border-radius: 32px;
-    padding: 10px 15px;
-    font-size: 1.4rem;
-    font-weight: bold;
-    align-self: stretch;
-  }
 
   footer {
     margin-top: auto;
@@ -177,6 +209,70 @@ import logo from "/favicon.jpg"
       &:hover {
         text-decoration: underline;
       }
+    }
+  }
+}
+
+@media screen and (max-width: 1000px) {
+  .register-container {
+    grid-template-columns: 1fr;
+    grid-template-rows: 40px auto 100px;
+    row-gap: 20px;
+    padding: 20px;
+
+    .x-container {
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      min-width: auto;
+      grid-row: 1 / 2;
+      width: clamp(520px, 60%, 560px);
+      margin: auto;
+
+      .icon {
+        width: 40px;
+        height: auto;
+      }
+    }
+
+    .info-container {
+      grid-row: 2 / 3;
+      padding: 0;
+      width: clamp(530px, 65%, 560px);
+      margin: auto;
+
+    }
+
+    footer {
+      padding: 20px 0;
+    }
+  }
+}
+
+@media screen and (max-width: 520px) {
+  .register-container {
+    padding: 40px;
+
+    .x-container {
+      width: 100%;
+    }
+
+    .info-container {
+      width: auto;
+      margin: auto;
+
+      h2 {
+        font-size: 4rem;
+        width: 80%;
+      }
+
+      h3 {
+        font-size: 2rem;
+      }
+    }
+
+    footer {
+      padding: 10px 0;
     }
   }
 }
