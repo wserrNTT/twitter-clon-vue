@@ -1,8 +1,15 @@
 <script lang="ts" setup>
 import { useRouter } from "vue-router";
+import { watch } from "vue";
+import { useUserStore } from "@/store/user.store";
 import { Icon } from "@iconify/vue"
 
 const router = useRouter();
+const userStore = useUserStore();
+
+watch(() => userStore.isLoggedIn, (currentState) => {
+  if (currentState) router.push({ name: 'home' })
+})
 </script>
 
 <template>
@@ -29,13 +36,13 @@ const router = useRouter();
         </div>
         <button type="button" class="full-button">Crear Cuenta</button>
         <p class="terms">
-          Al registrarte, aceptas los<a href="https://twitter.com/tos" class="highlighted">Términos de servicio
+          Al registrarte, aceptas los <a href="https://twitter.com/tos" class="highlighted">Términos de servicio
           </a>y la <a href="https://twitter.com/privacy" class="highlighted">Política de privacidad</a>, incluída la
           política de <a href="https://help.twitter.com/rules-and-policies/twitter-cookies" class="highlighted">Uso de
             Cookies</a>.
         </p>
         <h4 class="login-question">¿Ya tienes una cuenta?</h4>
-        <button type="button" class="login-button" @click="() => router.push({ name: 'home' })">Iniciar sesión</button>
+        <button type="button" class="login-button" @click="() => userStore.toggleLogin()">Iniciar sesión</button>
       </div>
     </div>
     <footer>
@@ -224,9 +231,9 @@ const router = useRouter();
       display: flex;
       justify-content: flex-start;
       align-items: center;
-      min-width: auto;
+      width: 100%;
+
       grid-row: 1 / 2;
-      width: clamp(520px, 60%, 560px);
       margin: auto;
 
       .icon {
@@ -238,9 +245,8 @@ const router = useRouter();
     .info-container {
       grid-row: 2 / 3;
       padding: 0;
-      width: clamp(530px, 65%, 560px);
+      width: 100%;
       margin: auto;
-
     }
 
     footer {
@@ -248,6 +254,7 @@ const router = useRouter();
     }
   }
 }
+
 
 @media screen and (max-width: 520px) {
   .register-container {

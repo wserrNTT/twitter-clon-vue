@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { RouterView } from 'vue-router';
+import LayoutEmpty from '@/layout/LayoutEmpty.vue';
 </script>
 
 <template>
-  <component :is="$route.meta.layout||'div'" class="default-layout">
+  <component :is="$route.meta.layout||LayoutEmpty">
     <RouterView />
   </component>
 </template>
