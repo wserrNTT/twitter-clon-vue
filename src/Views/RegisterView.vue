@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { Icon } from "@iconify/vue"
 import logo from "/favicon.jpg"
 </script>
 
@@ -11,8 +12,14 @@ import logo from "/favicon.jpg"
       <h2>Lo que está pasando ahora</h2>
       <div class="buttons-container">
         <h3>únete Hoy</h3>
-        <button class="empty-button">Registrate con Google</button>
-        <button class="empty-button">Registrate con Apple</button>
+        <button class="empty-button">
+          <icon icon="devicon:google" width="1.6rem" />
+          Registrate con Google
+        </button>
+        <button class="empty-button">
+          <Icon icon="bi:apple" width="1.6rem" />
+          Registrate con Apple
+        </button>
         <div class="separator">
           <span class="line"></span>
           <span>o</span>
@@ -104,6 +111,10 @@ import logo from "/favicon.jpg"
         padding: 10px 15px;
         font-size: 1.4rem;
         font-weight: bold;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        column-gap: 5px;
       }
 
       .separator {
