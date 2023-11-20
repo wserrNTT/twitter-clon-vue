@@ -3,7 +3,7 @@
 </script>
 
 <template>
-  <span>Home</span>
+  <span>Messages</span>
 </template>
 <style lang="scss" scoped>
 span {

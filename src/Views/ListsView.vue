@@ -1,9 +1,11 @@
 <script lang="ts" setup>
+import { useRoute } from "vue-router"
 
+const route = useRoute() 
 </script>
 
 <template>
-  <span>Home</span>
+  <span>{{ route.params.id }}'s Lists</span>
 </template>
 <style lang="scss" scoped>
 span {

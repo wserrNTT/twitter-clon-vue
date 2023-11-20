@@ -6,15 +6,31 @@ import type { IUser } from '@/common/types';
 export const useUserStore = defineStore('userStore', {
   state: () =>
     ({
-      username: '',
+      data: {
+        username: '',
+        displayname: '',
+        profilePicture: ''
+      },
       isLoggedIn: false
     } as IUser),
   getters: {
-    getUsername: (state) => state.username
+    getUsername: (state) => state.data?.username,
+    getDisplayname: (state) => state.data?.displayname,
+    getProfilePicture: (state) => state.data?.profilePicture,
+    getLogged: (state) => state.isLoggedIn
   },
   actions: {
-    toggleLogin() {
-      this.isLoggedIn = !this.isLoggedIn;
+    login(payload: {
+      username: string;
+      displayname: string;
+      profilePicture: string;
+    }) {
+      this.data = payload;
+      this.isLoggedIn = true;
+    },
+    logout() {
+      this.isLoggedIn = false;
+      this.data = null;
     }
   }
 });

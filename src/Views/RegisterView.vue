@@ -1,15 +1,22 @@
 <script lang="ts" setup>
+import { onMounted } from "vue";
 import { useRouter } from "vue-router";
-import { watch } from "vue";
 import { useUserStore } from "@/store/user.store";
 import { Icon } from "@iconify/vue"
 
 const router = useRouter();
 const userStore = useUserStore();
-
-watch(() => userStore.isLoggedIn, (currentState) => {
-  if (currentState) router.push({ name: 'home' })
+onMounted(() => {
+  if (userStore.$state.isLoggedIn) router.push({ name: 'home' })
 })
+
+const handleLogin = () => {
+  userStore.login({
+    username: 'user123',
+    displayname: 'user',
+    profilePicture: 'https://as1.ftcdn.net/v2/jpg/03/39/45/96/1000_F_339459697_XAFacNQmwnvJRqe1Fe9VOptPWMUxlZP8.jpg'
+  })
+}
 </script>
 
 <template>
@@ -42,7 +49,8 @@ watch(() => userStore.isLoggedIn, (currentState) => {
             Cookies</a>.
         </p>
         <h4 class="login-question">¿Ya tienes una cuenta?</h4>
-        <button type="button" class="login-button" @click="() => userStore.toggleLogin()">Iniciar sesión</button>
+        <button type="button" class="login-button" @click="handleLogin">Iniciar
+          sesión</button>
       </div>
     </div>
     <footer>
