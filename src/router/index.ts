@@ -41,6 +41,12 @@ export const router = createRouter({
       name: 'profile',
       component: () => import('@/Views/ProfileView.vue'),
       meta: { layout: LayoutTwitter }
+    },
+    {
+      path: '/:id/lists',
+      name: 'lists',
+      component: () => import('@/Views/ListsView.vue'),
+      meta: { layout: LayoutTwitter }
     }
   ]
 });

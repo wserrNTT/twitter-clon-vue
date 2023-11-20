@@ -1,11 +1,17 @@
 <script lang="ts" setup>
-import { Icon } from "@iconify/vue"
-import { useUserStore } from "@/store/user.store";
-import { RouterLink, useRouter } from "vue-router";
+// Vue
 import { onMounted } from "vue"
+// Pinia
+import { useUserStore } from "@/store/user.store";
+// Router
+import { RouterLink, useRouter, useRoute } from "vue-router";
+// Icons
+import { Icon } from "@iconify/vue"
 
 const userStore = useUserStore();
 const router = useRouter()
+const route = useRoute();
+
 onMounted(() => {
   if (!userStore.$state.isLoggedIn) router.push({ name: 'register' })
 })
@@ -19,41 +25,45 @@ onMounted(() => {
           <Icon class="icon" icon="simple-icons:x" />
         </router-link>
         <router-link :to="{ name: 'home' }" class="item">
-          <Icon class="icon" icon="material-symbols:home" />
+          <Icon class="icon" :icon="route.name === 'home' ? 'material-symbols:home' : 'material-symbols:home-outline'" />
           <p class="text">Inicio</p>
         </router-link>
         <router-link :to="{ name: 'explore' }" class="item">
-          <Icon class="icon" icon="tabler:search" />
+          <Icon class="icon" :icon="route.name === 'explore' ? 'iconamoon:search-bold' : 'iconamoon:search'" />
           <p class="text">Explorar</p>
         </router-link>
         <router-link :to="{ name: 'notifications' }" class="item">
-          <Icon class="icon" icon="ph:bell" />
+          <Icon class="icon" :icon="route.name === 'notifications' ? 'ph:bell-fill' : 'ph:bell-light'" />
           <p class="text">Notificaciones</p>
         </router-link>
         <router-link :to="{ name: 'messages' }" class="item">
-          <Icon class="icon" icon="teenyicons:envelope-outline" />
+          <Icon class="icon"
+            :icon="route.name === 'messages' ? 'teenyicons:envelope-solid' : 'teenyicons:envelope-outline'" />
           <p class="text">Mensajes</p>
         </router-link>
-        <div class="item">
-          <Icon class="icon" icon="mingcute:document-line" />
+        <router-link :to="{ name: 'lists', params: { id: userStore.getUsername } }" class="item"
+          v-if="userStore.getLogged">
+          <Icon class="icon"
+            :icon="route.name === 'lists' ? 'fluent:document-one-page-24-filled' : 'fluent:document-one-page-24-regular'" />
           <p class="text">Listas</p>
-        </div>
+        </router-link>
         <div class="item">
           <Icon class="icon" icon="simple-icons:x" />
           <p class="text">Premium</p>
         </div>
         <router-link :to="{ name: 'profile', params: { id: userStore.getUsername } }" class="item"
           v-if="userStore.getLogged">
-          <Icon class="icon" icon="mynaui:user" />
+          <Icon class="icon" :icon="route.name === 'profile' ? 'heroicons:user-solid' : 'heroicons:user'" />
           <p class="text">Perfil</p>
         </router-link>
-        <li class="item">
+        <div class="item">
           <Icon class="icon" icon="tabler:dots-circle-horizontal" />
           <p class="text">Más opciones</p>
-        </li>
-        <li class="item item-post">
+        </div>
+        <div class="item item-post">
+          <Icon icon="mingcute:quill-pen-line" class="icon" />
           <p class="text">Postear</p>
-        </li>
+        </div>
       </div>
       <div class="user" @click="() => userStore.logout()" v-if="userStore.getLogged">
         <img :src="userStore.getProfilePicture" alt="" class="user-pfp">
@@ -93,7 +103,7 @@ onMounted(() => {
         align-items: center;
         justify-content: flex-start;
         column-gap: 15px;
-        padding: 8px 20px 8px 10px;
+        padding: 8px 20px 8px 14px;
         border-radius: 64px;
         text-decoration: none;
         color: #e7e9ea;
@@ -120,6 +130,10 @@ onMounted(() => {
         align-self: stretch;
         background-color: #1d9bf0;
 
+        .icon {
+          display: none;
+        }
+
         .text {
           font-weight: bold;
           margin: auto;
@@ -137,9 +151,8 @@ onMounted(() => {
       align-self: stretch;
       column-gap: 10px;
       margin-top: auto;
-      padding: 10px 10px 0 10px;
+      padding: 8px 10px;
       font-size: 1.5rem;
-      padding: 10px;
       border-radius: 32px;
       cursor: pointer;
 
@@ -167,8 +180,53 @@ onMounted(() => {
       }
     }
   }
+}
 
+@media screen and (max-width: 1200px) {
+  .layout-container {
+    grid-template-columns: 90px auto;
 
+    .sidebar {
+      padding: 10px 5px;
 
+      .item-list {
+        align-items: center;
+
+        .item {
+          padding: 10px;
+
+          .text {
+            display: none;
+          }
+        }
+
+        .item-post {
+          align-self: center;
+          width: 50px;
+          height: 50px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          font-size: 3rem;
+
+          .icon {
+            display: block;
+          }
+        }
+      }
+
+      .user {
+        align-self: center;
+
+        .user-info {
+          display: none;
+        }
+
+        .icon {
+          display: none;
+        }
+      }
+    }
+  }
 }
 </style>

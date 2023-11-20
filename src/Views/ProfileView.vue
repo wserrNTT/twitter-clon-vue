@@ -1,11 +1,13 @@
 <script lang="ts" setup>
-import { useRoute } from "vue-router"
+import { useRoute, RouterView } from "vue-router"
 
 const route = useRoute() 
 </script>
 
 <template>
-  <span>{{ route.params.id }}'s Profile</span>
+  <span>{{ route.params.id }}'s Profile
+    <router-view/>
+  </span>
 </template>
 <style lang="scss" scoped>
 span {
