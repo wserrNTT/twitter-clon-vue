@@ -2,24 +2,27 @@
 // Vue
 import { onMounted } from "vue"
 // Pinia
-import { useUserStore } from "@/store/user.store";
+import { useLoginStore } from "@/store/login.store";
+import { useSampleStore } from "@/store/sample.store";
 // Router
 import { RouterLink, useRouter, useRoute } from "vue-router";
 // Icons
 import { Icon } from "@iconify/vue"
 
-const userStore = useUserStore();
+const loginStore = useLoginStore();
+const sampleStore = useSampleStore();
+
 const router = useRouter()
 const route = useRoute();
 
 onMounted(() => {
-  if (!userStore.$state.isLoggedIn) router.push({ name: 'register' })
+  if (!loginStore.$state.isLoggedIn) router.push({ name: 'register' })
 })
 </script>
 
 <template>
   <div class="layout-container">
-    <aside class="sidebar">
+    <aside class="main-sidebar">
       <div class="item-list">
         <router-link :to="{ name: 'home' }" class="item home">
           <Icon class="icon" icon="simple-icons:x" />
@@ -41,8 +44,8 @@ onMounted(() => {
             :icon="route.name === 'messages' ? 'teenyicons:envelope-solid' : 'teenyicons:envelope-outline'" />
           <p class="text">Mensajes</p>
         </router-link>
-        <router-link :to="{ name: 'lists', params: { id: userStore.getUsername } }" class="item"
-          v-if="userStore.getLogged">
+        <router-link :to="{ name: 'lists', params: { id: loginStore.getUsername } }" class="item"
+          v-if="loginStore.getLogged">
           <Icon class="icon"
             :icon="route.name === 'lists' ? 'fluent:document-one-page-24-filled' : 'fluent:document-one-page-24-regular'" />
           <p class="text">Listas</p>
@@ -51,8 +54,8 @@ onMounted(() => {
           <Icon class="icon" icon="simple-icons:x" />
           <p class="text">Premium</p>
         </div>
-        <router-link :to="{ name: 'profile', params: { id: userStore.getUsername } }" class="item"
-          v-if="userStore.getLogged">
+        <router-link :to="{ name: 'profile', params: { id: loginStore.getUsername } }" class="item"
+          v-if="loginStore.getLogged">
           <Icon class="icon" :icon="route.name === 'profile' ? 'heroicons:user-solid' : 'heroicons:user'" />
           <p class="text">Perfil</p>
         </router-link>
@@ -65,26 +68,75 @@ onMounted(() => {
           <p class="text">Postear</p>
         </div>
       </div>
-      <div class="user" @click="() => userStore.logout()" v-if="userStore.getLogged">
-        <img :src="userStore.getProfilePicture" alt="" class="user-pfp">
+      <div class="user" @click="() => loginStore.logout()" v-if="loginStore.getLogged">
+        <img :src="loginStore.getProfilePicture" alt="" class="user-pfp">
         <div class="user-info">
-          <span class="display-name">{{ userStore.getDisplayname }}</span>
-          <span class="user-name">@{{ userStore.getUsername }}</span>
+          <span class="display-name">{{ loginStore.getDisplayname }}</span>
+          <span class="user-name">@{{ loginStore.getUsername }}</span>
         </div>
         <Icon icon="mi:options-horizontal" class="icon" />
       </div>
     </aside>
     <slot />
+    <aside class="right-sidebar">
+      <div class="sidebar-item search">
+        <Icon class="icon" icon="iconamoon:search" /> <input class="input-search" type="text" placeholder="Buscar">
+      </div>
+      <div class="sidebar-item premium">
+        <p class="title">Suscríbete a Premium
+        </p>
+        <p class="body">
+          Suscríbete para desbloquear nuevas funciones y, si eres elegible, recibir un pago de cuota de ingresos por
+          anuncios.
+        </p>
+        <button type="button" class="subscribe-button">Suscribirse</button>
+      </div>
+      <div class="sidebar-item trends">
+        <p class="title">Tendencias para ti</p>
+        <div class="trend" v-for="trend in sampleStore.getRandomTrends">
+          <div class="info">
+            <p class="header">Tendencia</p>
+            <p class="name">{{ trend.name }}</p>
+            <p class="volume" v-if="trend.tweet_volume">{{ trend.tweet_volume }} posts</p>
+          </div>
+          <div class="options">
+            <Icon icon="mi:options-horizontal" class="icon" />
+          </div>
+        </div>
+      </div>
+      <div class="sidebar-item follow">
+        <p class="title">A quién seguir</p>
+        <div class="user" v-for="user in sampleStore.getRandomUsers">
+          <img class="profile-picture" :src="user.profilePicture" :alt="user.displayname">
+          <div class="info">
+            <p class="display-name">{{ user.displayname }}</p>
+            <p class="user-name">@{{ user.username }}</p>
+          </div>
+          <button class="follow-button">Seguir</button>
+        </div>
+      </div>
+      <div class="sidebar-item footer">
+        <a class="link" href="https://twitter.com/tos">Condiciones de Servicio</a>
+        <a class="link" href="https://twitter.com/privacy">Política de Privacidad</a>
+        <a class="link" href="https://support.twitter.com/articles/20170514">Política de cookies</a>
+        <a class="link" href="https://help.twitter.com/resources/accessibility">Accesibilidad</a>
+        <a class="link"
+          href="https://business.twitter.com/en/help/troubleshooting/how-twitter-ads-work.html?ref=web-twc-ao-gbl-adsinfo&utm_source=twc&utm_medium=web&utm_campaign=ao&utm_content=adsinfo">Información
+          de anuncios</a>
+        <span class="link">Más opciones...</span>
+        <span class="link">© 2023 X Corp.</span>
+      </div>
+    </aside>
   </div>
 </template>
 <style lang="scss" scoped>
 .layout-container {
   color: #e7e9ea;
   display: grid;
-  grid-template-columns: 315px auto;
+  grid-template-columns: 315px auto 440px;
   height: 100vh;
 
-  .sidebar {
+  .main-sidebar {
     display: flex;
     flex-direction: column;
     padding: 15px;
@@ -180,13 +232,196 @@ onMounted(() => {
       }
     }
   }
+
+  .right-sidebar {
+    border-left: 1px solid #454545;
+    padding: 5px 55px 10px 25px;
+    display: flex;
+    flex-direction: column;
+    font-size: 2rem;
+    row-gap: 15px;
+    max-height: 100vh;
+    overflow-y: scroll;
+
+    .search {
+      position: relative;
+      color: #71767b;
+
+
+      .icon {
+        position: absolute;
+        top: calc(0% + 0.9rem);
+        left: 20px;
+      }
+
+      .input-search {
+        width: 100%;
+        padding: 12px 50px;
+        border-radius: 32px;
+        background-color: #202327;
+        color: #71767b;
+        font-size: 1.6rem;
+        line-height: 1.6rem;
+        border: none;
+      }
+    }
+
+    .premium {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 10px 20px;
+      row-gap: 8px;
+      border-radius: 16px;
+      background-color: #16181c;
+      color: #e7e9ea;
+      font-weight: bold;
+
+      .title {
+        font-size: 2rem;
+      }
+
+      .body {
+        font-size: 1.5rem;
+      }
+
+      .subscribe-button {
+        background-color: #1b8bd6;
+        padding: 10px 20px;
+        font-size: 1.5rem;
+        color: #e7e9ea;
+        font-weight: bold;
+        border: none;
+        border-radius: 32px;
+        cursor: pointer;
+
+        &:hover {
+          background-color: #1685cf;
+          transform: background-color ease-in 0.3s;
+        }
+      }
+    }
+
+    .trends {
+      display: flex;
+      flex-direction: column;
+      border-radius: 16px;
+      background-color: #16181c;
+
+      .title {
+        font-weight: bold;
+        padding: 10px 20px 5px;
+        color: #e7e9ea;
+      }
+
+      .trend {
+        display: flex;
+        padding: 15px 20px;
+        color: #71767b;
+        transition: background-color ease-in 0.2s;
+        cursor: pointer;
+
+        .info {
+          display: flex;
+          flex-direction: column;
+          row-gap: 2px;
+          font-size: 1.3rem;
+
+          .name {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #e7e9ea;
+          }
+        }
+
+        .options {
+          margin-left: auto;
+        }
+
+        &:hover {
+          background-color: #202327;
+        }
+      }
+    }
+
+    .follow {
+      display: flex;
+      flex-direction: column;
+      border-radius: 16px;
+      background-color: #16181c;
+
+      .title {
+        font-weight: bold;
+        padding: 10px 20px 5px;
+        color: #e7e9ea;
+      }
+
+      .user {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 12px 20px;
+        font-size: 1.3rem;
+        color: #71767b;
+        transition: background-color ease-in 0.2s;
+        cursor: pointer;
+
+        .profile-picture {
+          width: 4rem;
+          height: 4rem;
+          border-radius: 50%;
+        }
+
+        .info {
+          .display-name {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #e7e9ea;
+          }
+        }
+
+        .follow-button {
+          margin-left: auto;
+          background-color: #e7e9ea;
+          color: #202327;
+          padding: 5px 10px;
+          font-size: 1.5rem;
+          border: none;
+          border-radius: 32px;
+        }
+
+        &:hover {
+          background-color: #202327;
+        }
+      }
+    }
+
+    .footer {
+      color: #71767b;
+      display: flex;
+      flex-wrap: wrap;
+      column-gap: 20px;
+      padding: 20px;
+      font-size: 1.4rem;
+
+      .link {
+        text-decoration: none;
+
+        color: inherit;
+
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+  }
 }
 
 @media screen and (max-width: 1200px) {
   .layout-container {
-    grid-template-columns: 90px auto;
+    grid-template-columns: 90px auto 300px;
 
-    .sidebar {
+    .main-sidebar {
       padding: 10px 5px;
 
       .item-list {
@@ -229,4 +464,14 @@ onMounted(() => {
     }
   }
 }
-</style>
+
+@media screen and (max-width: 1000px) {
+  .layout-container {
+    grid-template-columns: 90px auto;
+
+    .right-sidebar {
+      display: none;
+    }
+  }
+}
+</style>@/store/sample.store@/store/login.store

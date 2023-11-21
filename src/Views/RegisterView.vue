@@ -1,20 +1,22 @@
 <script lang="ts" setup>
 import { onMounted } from "vue";
 import { useRouter } from "vue-router";
-import { useUserStore } from "@/store/user.store";
+import { useLoginStore } from "@/store/login.store";
 import { Icon } from "@iconify/vue"
 
 const router = useRouter();
-const userStore = useUserStore();
+const loginStore = useLoginStore();
 onMounted(() => {
-  if (userStore.$state.isLoggedIn) router.push({ name: 'home' })
+  if (loginStore.$state.isLoggedIn) router.push({ name: 'home' })
 })
 
 const handleLogin = () => {
-  userStore.login({
+  loginStore.login({
     username: 'user123',
     displayname: 'user',
-    profilePicture: 'https://as1.ftcdn.net/v2/jpg/03/39/45/96/1000_F_339459697_XAFacNQmwnvJRqe1Fe9VOptPWMUxlZP8.jpg'
+    profilePicture: 'https://as1.ftcdn.net/v2/jpg/03/39/45/96/1000_F_339459697_XAFacNQmwnvJRqe1Fe9VOptPWMUxlZP8.jpg',
+    following: 625,
+    followers: 23
   })
 }
 </script>
@@ -292,3 +294,4 @@ const handleLogin = () => {
   }
 }
 </style> 
+@/store/login.store
