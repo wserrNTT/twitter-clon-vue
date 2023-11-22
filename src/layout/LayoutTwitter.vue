@@ -29,26 +29,26 @@ onMounted(() => {
         </router-link>
         <router-link :to="{ name: 'home' }" class="item">
           <Icon class="icon" :icon="route.name === 'home' ? 'material-symbols:home' : 'material-symbols:home-outline'" />
-          <p class="text">Inicio</p>
+          <p class="text" :class="{ 'bold': route.name === 'home' }">Inicio</p>
         </router-link>
         <router-link :to="{ name: 'explore' }" class="item">
           <Icon class="icon" :icon="route.name === 'explore' ? 'iconamoon:search-bold' : 'iconamoon:search'" />
-          <p class="text">Explorar</p>
+          <p class="text" :class="{ 'bold': route.name === 'explore' }">Explorar</p>
         </router-link>
         <router-link :to="{ name: 'notifications' }" class="item">
           <Icon class="icon" :icon="route.name === 'notifications' ? 'ph:bell-fill' : 'ph:bell-light'" />
-          <p class="text">Notificaciones</p>
+          <p class="text" :class="{ 'bold': route.name === 'notifications' }">Notificaciones</p>
         </router-link>
         <router-link :to="{ name: 'messages' }" class="item">
           <Icon class="icon"
             :icon="route.name === 'messages' ? 'teenyicons:envelope-solid' : 'teenyicons:envelope-outline'" />
-          <p class="text">Mensajes</p>
+          <p class="text" :class="{ 'bold': route.name === 'messages' }">Mensajes</p>
         </router-link>
         <router-link :to="{ name: 'lists', params: { id: loginStore.getUsername } }" class="item"
           v-if="loginStore.getLogged">
           <Icon class="icon"
             :icon="route.name === 'lists' ? 'fluent:document-one-page-24-filled' : 'fluent:document-one-page-24-regular'" />
-          <p class="text">Listas</p>
+          <p class="text" :class="{ 'bold': route.name === 'lists' }">Listas</p>
         </router-link>
         <div class="item">
           <Icon class="icon" icon="simple-icons:x" />
@@ -57,7 +57,7 @@ onMounted(() => {
         <router-link :to="{ name: 'profile', params: { id: loginStore.getUsername } }" class="item"
           v-if="loginStore.getLogged">
           <Icon class="icon" :icon="route.name === 'profile' ? 'heroicons:user-solid' : 'heroicons:user'" />
-          <p class="text">Perfil</p>
+          <p class="text" :class="{ 'bold': route.name === 'profile' }">Perfil</p>
         </router-link>
         <div class="item">
           <Icon class="icon" icon="tabler:dots-circle-horizontal" />
@@ -78,53 +78,58 @@ onMounted(() => {
       </div>
     </aside>
     <slot />
-    <aside class="right-sidebar">
-      <div class="sidebar-item search">
-        <Icon class="icon" icon="iconamoon:search" /> <input class="input-search" type="text" placeholder="Buscar">
-      </div>
-      <div class="sidebar-item premium">
-        <p class="title">Suscríbete a Premium
-        </p>
-        <p class="body">
-          Suscríbete para desbloquear nuevas funciones y, si eres elegible, recibir un pago de cuota de ingresos por
-          anuncios.
-        </p>
-        <button type="button" class="subscribe-button">Suscribirse</button>
-      </div>
-      <div class="sidebar-item trends">
-        <p class="title">Tendencias para ti</p>
-        <div class="trend" v-for="trend in sampleStore.getRandomTrends">
-          <div class="info">
-            <p class="header">Tendencia</p>
-            <p class="name">{{ trend.name }}</p>
-            <p class="volume" v-if="trend.tweet_volume">{{ trend.tweet_volume }} posts</p>
-          </div>
-          <div class="options">
-            <Icon icon="mi:options-horizontal" class="icon" />
-          </div>
+    <aside class="right-sidebar" v-if="route.name !== 'messages'">
+      <div class="search-container">
+        <div class="search">
+          <Icon class="icon" icon="iconamoon:search" /> <input class="input-search" type="text" placeholder="Buscar">
         </div>
       </div>
-      <div class="sidebar-item follow">
-        <p class="title">A quién seguir</p>
-        <div class="user" v-for="user in sampleStore.getRandomUsers">
-          <img class="profile-picture" :src="user.profilePicture" :alt="user.displayname">
-          <div class="info">
-            <p class="display-name">{{ user.displayname }}</p>
-            <p class="user-name">@{{ user.username }}</p>
-          </div>
-          <button class="follow-button">Seguir</button>
+      <div class="sidebar-items">
+        <div class=" premium" v-if="['home'].includes(route.name as string)">
+          <p class="title">Suscríbete a Premium
+          </p>
+          <p class="body">
+            Suscríbete para desbloquear nuevas funciones y, si eres elegible, recibir un pago de cuota de ingresos por
+            anuncios.
+          </p>
+          <button type="button" class="subscribe-button">Suscribirse</button>
         </div>
-      </div>
-      <div class="sidebar-item footer">
-        <a class="link" href="https://twitter.com/tos">Condiciones de Servicio</a>
-        <a class="link" href="https://twitter.com/privacy">Política de Privacidad</a>
-        <a class="link" href="https://support.twitter.com/articles/20170514">Política de cookies</a>
-        <a class="link" href="https://help.twitter.com/resources/accessibility">Accesibilidad</a>
-        <a class="link"
-          href="https://business.twitter.com/en/help/troubleshooting/how-twitter-ads-work.html?ref=web-twc-ao-gbl-adsinfo&utm_source=twc&utm_medium=web&utm_campaign=ao&utm_content=adsinfo">Información
-          de anuncios</a>
-        <span class="link">Más opciones...</span>
-        <span class="link">© 2023 X Corp.</span>
+        <div class=" trends" v-if="['home', 'notifications', 'lists', 'profile'].includes(route.name as string)">
+          <p class="title">Tendencias para ti</p>
+          <div class="trend" v-for="trend in sampleStore.getRandomTrends">
+            <div class="info">
+              <p class="header">Tendencia</p>
+              <p class="name">{{ trend.name }}</p>
+              <p class="volume" v-if="trend.tweet_volume">{{ trend.tweet_volume }} posts</p>
+            </div>
+            <div class="options">
+              <Icon icon="mi:options-horizontal" class="icon" />
+            </div>
+          </div>
+        </div>
+        <div class=" follow"
+          v-if="['home', 'explore', 'notifications', 'lists', 'profile'].includes(route.name as string)">
+          <p class="title">{{ route.name === 'profile' ? 'Tal vez te guste' : 'A quién seguir' }}</p>
+          <div class="user" v-for="user in sampleStore.getRandomUsers">
+            <img class="profile-picture" :src="user.profilePicture" :alt="user.displayname">
+            <div class="info">
+              <p class="display-name">{{ user.displayname }}</p>
+              <p class="user-name">@{{ user.username }}</p>
+            </div>
+            <button class="follow-button">Seguir</button>
+          </div>
+        </div>
+        <div class=" footer">
+          <a class="link" href="https://twitter.com/tos">Condiciones de Servicio</a>
+          <a class="link" href="https://twitter.com/privacy">Política de Privacidad</a>
+          <a class="link" href="https://support.twitter.com/articles/20170514">Política de cookies</a>
+          <a class="link" href="https://help.twitter.com/resources/accessibility">Accesibilidad</a>
+          <a class="link"
+            href="https://business.twitter.com/en/help/troubleshooting/how-twitter-ads-work.html?ref=web-twc-ao-gbl-adsinfo&utm_source=twc&utm_medium=web&utm_campaign=ao&utm_content=adsinfo">Información
+            de anuncios</a>
+          <span class="link">Más opciones...</span>
+          <span class="link">© 2023 X Corp.</span>
+        </div>
       </div>
     </aside>
   </div>
@@ -195,6 +200,10 @@ onMounted(() => {
           background-color: #1b8bd6;
         }
       }
+
+      .bold {
+        font-weight: bold;
+      }
     }
 
     .user {
@@ -235,188 +244,201 @@ onMounted(() => {
 
   .right-sidebar {
     border-left: 1px solid #454545;
-    padding: 5px 55px 10px 25px;
-    display: flex;
-    flex-direction: column;
-    font-size: 2rem;
-    row-gap: 15px;
     max-height: 100vh;
     overflow-y: scroll;
 
-    .search {
-      position: relative;
-      color: #71767b;
+    .search-container {
+      position: sticky;
+      top: 0px;
+      width: 100%;
+      padding: 5px 55px 5px 25px;
+      background-color: black;
 
-
-      .icon {
-        position: absolute;
-        top: calc(0% + 0.9rem);
-        left: 20px;
-      }
-
-      .input-search {
-        width: 100%;
-        padding: 12px 50px;
-        border-radius: 32px;
-        background-color: #202327;
+      .search {
+        position: relative;
         color: #71767b;
-        font-size: 1.6rem;
-        line-height: 1.6rem;
-        border: none;
-      }
-    }
-
-    .premium {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      padding: 10px 20px;
-      row-gap: 8px;
-      border-radius: 16px;
-      background-color: #16181c;
-      color: #e7e9ea;
-      font-weight: bold;
-
-      .title {
         font-size: 2rem;
-      }
 
-      .body {
-        font-size: 1.5rem;
-      }
-
-      .subscribe-button {
-        background-color: #1b8bd6;
-        padding: 10px 20px;
-        font-size: 1.5rem;
-        color: #e7e9ea;
-        font-weight: bold;
-        border: none;
-        border-radius: 32px;
-        cursor: pointer;
-
-        &:hover {
-          background-color: #1685cf;
-          transform: background-color ease-in 0.3s;
-        }
-      }
-    }
-
-    .trends {
-      display: flex;
-      flex-direction: column;
-      border-radius: 16px;
-      background-color: #16181c;
-
-      .title {
-        font-weight: bold;
-        padding: 10px 20px 5px;
-        color: #e7e9ea;
-      }
-
-      .trend {
-        display: flex;
-        padding: 15px 20px;
-        color: #71767b;
-        transition: background-color ease-in 0.2s;
-        cursor: pointer;
-
-        .info {
-          display: flex;
-          flex-direction: column;
-          row-gap: 2px;
-          font-size: 1.3rem;
-
-          .name {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: #e7e9ea;
-          }
+        .icon {
+          position: absolute;
+          top: calc(0% + 0.9rem);
+          left: 20px;
         }
 
-        .options {
-          margin-left: auto;
-        }
-
-        &:hover {
+        .input-search {
+          width: 100%;
+          padding: 12px 50px;
+          border-radius: 32px;
           background-color: #202327;
-        }
-        &:last-child {
-          border-radius: 0 0 16px 16px;
+          color: #71767b;
+          font-size: 1.6rem;
+          line-height: 1.6rem;
+          border: none;
         }
       }
     }
 
-    .follow {
+    .sidebar-items {
+      padding: 5px 55px 10px 25px;
       display: flex;
       flex-direction: column;
-      border-radius: 16px;
-      background-color: #16181c;
+      font-size: 2rem;
+      row-gap: 15px;
 
-      .title {
-        font-weight: bold;
-        padding: 10px 20px 5px;
-        color: #e7e9ea;
-      }
-
-      .user {
+      .premium {
         display: flex;
-        align-items: center;
-        gap: 10px;
-        padding: 12px 20px;
-        font-size: 1.3rem;
-        color: #71767b;
-        transition: background-color ease-in 0.2s;
-        cursor: pointer;
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 10px 20px;
+        row-gap: 8px;
+        border-radius: 16px;
+        background-color: #16181c;
+        color: #e7e9ea;
+        font-weight: bold;
 
-        .profile-picture {
-          width: 4rem;
-          height: 4rem;
-          border-radius: 50%;
+        .title {
+          font-size: 2rem;
         }
 
-        .info {
-          .display-name {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: #e7e9ea;
-          }
-        }
-
-        .follow-button {
-          margin-left: auto;
-          background-color: #e7e9ea;
-          color: #202327;
-          padding: 5px 10px;
+        .body {
           font-size: 1.5rem;
+        }
+
+        .subscribe-button {
+          background-color: #1b8bd6;
+          padding: 10px 20px;
+          font-size: 1.5rem;
+          color: #e7e9ea;
+          font-weight: bold;
           border: none;
           border-radius: 32px;
-        }
+          cursor: pointer;
 
-        &:hover {
-          background-color: #202327;
-        }
-        &:last-child {
-          border-radius: 0 0 16px 16px;
+          &:hover {
+            background-color: #1685cf;
+            transform: background-color ease-in 0.3s;
+          }
         }
       }
-    }
 
-    .footer {
-      color: #71767b;
-      display: flex;
-      flex-wrap: wrap;
-      column-gap: 20px;
-      padding: 20px;
-      font-size: 1.4rem;
+      .trends {
+        display: flex;
+        flex-direction: column;
+        border-radius: 16px;
+        background-color: #16181c;
 
-      .link {
-        text-decoration: none;
+        .title {
+          font-weight: bold;
+          padding: 10px 20px 5px;
+          color: #e7e9ea;
+        }
 
-        color: inherit;
+        .trend {
+          display: flex;
+          padding: 15px 20px;
+          color: #71767b;
+          transition: background-color ease-in 0.2s;
+          cursor: pointer;
 
-        &:hover {
-          text-decoration: underline;
+          .info {
+            display: flex;
+            flex-direction: column;
+            row-gap: 2px;
+            font-size: 1.3rem;
+
+            .name {
+              font-size: 1.5rem;
+              font-weight: bold;
+              color: #e7e9ea;
+            }
+          }
+
+          .options {
+            margin-left: auto;
+          }
+
+          &:hover {
+            background-color: #202327;
+          }
+
+          &:last-child {
+            border-radius: 0 0 16px 16px;
+          }
+        }
+      }
+
+      .follow {
+        display: flex;
+        flex-direction: column;
+        border-radius: 16px;
+        background-color: #16181c;
+
+        .title {
+          font-weight: bold;
+          padding: 10px 20px 5px;
+          color: #e7e9ea;
+        }
+
+        .user {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          padding: 12px 20px;
+          font-size: 1.3rem;
+          color: #71767b;
+          transition: background-color ease-in 0.2s;
+          cursor: pointer;
+
+          .profile-picture {
+            width: 4rem;
+            height: 4rem;
+            border-radius: 50%;
+          }
+
+          .info {
+            .display-name {
+              font-size: 1.5rem;
+              font-weight: bold;
+              color: #e7e9ea;
+            }
+          }
+
+          .follow-button {
+            margin-left: auto;
+            background-color: #e7e9ea;
+            color: #202327;
+            padding: 5px 10px;
+            font-size: 1.5rem;
+            border: none;
+            border-radius: 32px;
+          }
+
+          &:hover {
+            background-color: #202327;
+          }
+
+          &:last-child {
+            border-radius: 0 0 16px 16px;
+          }
+        }
+      }
+
+      .footer {
+        color: #71767b;
+        display: flex;
+        flex-wrap: wrap;
+        column-gap: 20px;
+        padding: 20px;
+        font-size: 1.4rem;
+
+        .link {
+          text-decoration: none;
+
+          color: inherit;
+
+          &:hover {
+            text-decoration: underline;
+          }
         }
       }
     }
