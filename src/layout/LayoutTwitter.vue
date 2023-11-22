@@ -341,6 +341,9 @@ onMounted(() => {
         &:hover {
           background-color: #202327;
         }
+        &:last-child {
+          border-radius: 0 0 16px 16px;
+        }
       }
     }
 
@@ -392,6 +395,9 @@ onMounted(() => {
 
         &:hover {
           background-color: #202327;
+        }
+        &:last-child {
+          border-radius: 0 0 16px 16px;
         }
       }
     }
