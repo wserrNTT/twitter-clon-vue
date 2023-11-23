@@ -502,4 +502,4 @@ onMounted(() => {
     }
   }
 }
-</style>@/store/sample.store@/store/login.store
+</style>

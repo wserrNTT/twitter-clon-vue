@@ -1,12 +1,23 @@
 <script lang="ts" setup>
-import { useRoute, RouterView } from "vue-router"
+// Vue
+import { onMounted } from "vue";
+// Pinia
+import { useLoginStore } from "@/store/login.store";
+// Vue-router
+import { useRoute } from "vue-router"
+// Utils
+import { updateDocumentTitle } from "@/utils"
 
-const route = useRoute() 
+const route = useRoute()
+const loginStore = useLoginStore();
+
+onMounted(() => {
+  updateDocumentTitle(`${loginStore.getDisplayname} (@${loginStore.getUsername}) / X`)
+})
 </script>
 
 <template>
   <span>{{ route.params.id }}'s Profile
-    <router-view/>
   </span>
 </template>
 <style lang="scss" scoped>
