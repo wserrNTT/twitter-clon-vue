@@ -1,24 +1,20 @@
 <script lang="ts" setup>
-import { onMounted } from "vue";
+import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { useLoginStore } from "@/store/login.store";
 import { Icon } from "@iconify/vue"
 
+import LoginComponent from "@/components/LoginComponent.vue";
+
 const router = useRouter();
 const loginStore = useLoginStore();
+
 onMounted(() => {
   if (loginStore.$state.isLoggedIn) router.push({ name: 'home' })
 })
 
-const handleLogin = () => {
-  loginStore.login({
-    username: 'user123',
-    displayname: 'user',
-    profilePicture: 'https://as1.ftcdn.net/v2/jpg/03/39/45/96/1000_F_339459697_XAFacNQmwnvJRqe1Fe9VOptPWMUxlZP8.jpg',
-    following: 625,
-    followers: 23
-  })
-}
+const showLogin = ref(false)
+
 </script>
 
 <template>
@@ -51,7 +47,7 @@ const handleLogin = () => {
             Cookies</a>.
         </p>
         <h4 class="login-question">¿Ya tienes una cuenta?</h4>
-        <button type="button" class="login-button" @click="handleLogin">Iniciar
+        <button type="button" class="login-button" @click="() => showLogin = true">Iniciar
           sesión</button>
       </div>
     </div>
@@ -81,6 +77,7 @@ const handleLogin = () => {
       <span>© 2023 X Corp</span>
     </footer>
   </div>
+  <LoginComponent v-if="showLogin" @close="showLogin = false" />
 </template>
 
 <style lang="scss" scoped>
@@ -294,4 +291,3 @@ const handleLogin = () => {
   }
 }
 </style> 
-@/store/login.store
