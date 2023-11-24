@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 // Vue
-import { onMounted } from "vue"
+import { onMounted, ref } from "vue"
 // Pinia
 import { useLoginStore } from "@/store/login.store";
 import { useSampleStore } from "@/store/sample.store";
@@ -14,7 +14,7 @@ const sampleStore = useSampleStore();
 
 const router = useRouter()
 const route = useRoute();
-
+const showMenu = ref(false)
 onMounted(() => {
   if (!loginStore.$state.isLoggedIn) router.push({ name: 'register' })
 })
@@ -68,13 +68,19 @@ onMounted(() => {
           <p class="text">Postear</p>
         </div>
       </div>
-      <div class="user" @click="() => loginStore.logout()" v-if="loginStore.getLogged">
+      <div class="user" :class="{ hover: !showMenu }" v-if="loginStore.getLogged" @click="() => showMenu = true">
         <img :src="loginStore.getProfilePicture" alt="" class="user-pfp">
         <div class="user-info">
           <span class="display-name">{{ loginStore.getDisplayname }}</span>
           <span class="user-name">@{{ loginStore.getUsername }}</span>
         </div>
         <Icon icon="mi:options-horizontal" class="icon" />
+        <div class="submenu" v-if="showMenu">
+          <div class="items">
+            <p class="item">Agregar una cuenta existente</p>
+            <p class="item" @click="() => loginStore.logout()">Cerrar la sesión de @{{ loginStore.getUsername }}</p>
+          </div>
+        </div>
       </div>
     </aside>
     <slot />
@@ -132,6 +138,7 @@ onMounted(() => {
         </div>
       </div>
     </aside>
+    <div class="background" v-if="showMenu" @click="() => showMenu = false"></div>
   </div>
 </template>
 <style lang="scss" scoped>
@@ -207,6 +214,7 @@ onMounted(() => {
     }
 
     .user {
+      position: relative;
       display: flex;
       align-items: center;
       align-self: stretch;
@@ -215,6 +223,7 @@ onMounted(() => {
       padding: 8px 10px;
       font-size: 1.5rem;
       border-radius: 32px;
+      transition: background-color 0.2s;
       cursor: pointer;
 
       .user-pfp {
@@ -236,8 +245,51 @@ onMounted(() => {
         font-size: 2rem;
       }
 
-      &:hover {
+      &:hover.hover {
         background-color: #313131;
+      }
+
+      .submenu {
+        position: absolute;
+        bottom: calc(100% + 12px);
+        left: -25px;
+        display: flex;
+        border-radius: 16px;
+        padding: 12px 0;
+        width: calc(100% + 50px);
+        background-color: #000000;
+        box-shadow: rgba(255, 255, 255, 0.2) 0px 0px 15px,
+          rgba(255, 255, 255, 0.15) 0px 0px 3px 1px;
+        z-index: 2;
+
+        &::after {
+          content: "";
+          position: absolute;
+          bottom: -5px;
+          left: calc(50% - 5px);
+          width: 10px;
+          height: 10px;
+          background-color: #000000;
+          box-shadow:
+            rgba(255, 255, 255, 0.15) 2px 2px 2px 1px;
+          transform: rotate(45deg);
+        }
+
+        .items {
+          flex-direction: column;
+          font-size: 1.5rem;
+          font-weight: bold;
+          width: 100%;
+
+          .item {
+            padding: 10px 20px;
+            transition: background-color 0.2s;
+
+            &:hover {
+              background-color: #272727;
+            }
+          }
+        }
       }
     }
   }
@@ -442,6 +494,15 @@ onMounted(() => {
         }
       }
     }
+  }
+
+  .background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
   }
 }
 
