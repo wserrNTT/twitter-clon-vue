@@ -12,7 +12,7 @@ const router = createRouter({
       name: 'register',
       component: () => import('@/Views/RegisterView.vue'),
       meta: {
-        title: 'X. Es lo que está pasando'
+        title: 'X. Es lo que está pasando /X'
       }
     },
     {
@@ -20,7 +20,7 @@ const router = createRouter({
       name: 'home',
       component: () => import('@/Views/HomeView.vue'),
       meta: {
-        title: 'Inicio',
+        title: 'Inicio /X',
         layout: LayoutTwitter
       }
     },
@@ -29,7 +29,7 @@ const router = createRouter({
       name: 'explore',
       component: () => import('@/Views/ExploreView.vue'),
       meta: {
-        title: 'Explorar',
+        title: 'Explorar /X',
         layout: LayoutTwitter
       }
     },
@@ -38,7 +38,7 @@ const router = createRouter({
       name: 'notifications',
       component: () => import('@/Views/NotificationsView.vue'),
       meta: {
-        title: 'Notificaciones',
+        title: 'Notificaciones /X',
         layout: LayoutTwitter
       }
     },
@@ -47,7 +47,7 @@ const router = createRouter({
       name: 'messages',
       component: () => import('@/Views/MessagesView.vue'),
       meta: {
-        title: 'Mensajes',
+        title: 'Mensajes /X',
         layout: LayoutTwitter
       }
     },
@@ -64,13 +64,21 @@ const router = createRouter({
       meta: {
         layout: LayoutTwitter
       }
+    },
+    {
+      path: '/logout',
+      name: 'logout',
+      component: () => import('@/Views/LogoutView.vue'),
+      meta: {
+        title: 'X'
+      }
     }
   ]
 });
 
 router.beforeEach((to, from, next) => {
   const { title } = to.meta;
-  if (title) document.title = `${title} / X`;
+  if (title) document.title = title as string;
   next();
 });
 

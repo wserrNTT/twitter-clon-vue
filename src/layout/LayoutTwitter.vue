@@ -78,7 +78,7 @@ onMounted(() => {
         <div class="submenu" v-if="showMenu">
           <div class="items">
             <p class="item">Agregar una cuenta existente</p>
-            <p class="item" @click="() => loginStore.logout()">Cerrar la sesión de @{{ loginStore.getUsername }}</p>
+            <p class="item" @click="router.push({ name: 'logout' })">Cerrar la sesión de @{{ loginStore.getUsername }}</p>
           </div>
         </div>
       </div>

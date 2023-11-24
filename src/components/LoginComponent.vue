@@ -28,7 +28,7 @@ const handleLogin = () => {
           Inicia sesión en X
         </p>
         <button type="button" class="empty-button">
-          <icon icon="devicon:google" width="1.6rem" />
+          <Icon icon="devicon:google" width="1.6rem" />
           Inicia sesión con Google
         </button>
         <button type="button" class="empty-button">
