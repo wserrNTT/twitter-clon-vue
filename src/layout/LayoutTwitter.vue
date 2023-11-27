@@ -142,8 +142,16 @@ onMounted(() => {
   </div>
 </template>
 <style lang="scss" scoped>
+$blueTwitter: #1b8bd6;
+$darkBlueTwitter: #1685cf;
+
+$lightGrey: #71767b;
+$grey: #313131;
+$darkGrey: #16181c;
+$white: #e7e9ea;
+
 .layout-container {
-  color: #e7e9ea;
+  color: $white;
   display: grid;
   grid-template-columns: 315px auto 440px;
   height: 100vh;
@@ -152,7 +160,7 @@ onMounted(() => {
     display: flex;
     flex-direction: column;
     padding: 15px;
-    border-right: 1px solid #454545;
+    border-right: 1px solid $grey;
     padding-left: 50px;
 
     .item-list {
@@ -170,12 +178,12 @@ onMounted(() => {
         padding: 8px 20px 8px 14px;
         border-radius: 64px;
         text-decoration: none;
-        color: #e7e9ea;
+        color: $white;
         cursor: pointer;
         transition: background-color ease-in 0.2s;
 
         &:hover {
-          background-color: #313131;
+          background-color: $grey;
         }
 
         .icon {
@@ -192,7 +200,7 @@ onMounted(() => {
       .item-post {
         margin-top: 10px;
         align-self: stretch;
-        background-color: #1d9bf0;
+        background-color: $blueTwitter;
 
         .icon {
           display: none;
@@ -204,7 +212,7 @@ onMounted(() => {
         }
 
         &:hover {
-          background-color: #1b8bd6;
+          background-color: $darkBlueTwitter;
         }
       }
 
@@ -246,7 +254,7 @@ onMounted(() => {
       }
 
       &:hover.hover {
-        background-color: #313131;
+        background-color: $grey;
       }
 
       .submenu {
@@ -286,7 +294,7 @@ onMounted(() => {
             transition: background-color 0.2s;
 
             &:hover {
-              background-color: #272727;
+              background-color: $grey;
             }
           }
         }
@@ -295,7 +303,7 @@ onMounted(() => {
   }
 
   .right-sidebar {
-    border-left: 1px solid #454545;
+    border-left: 1px solid $grey;
     max-height: 100vh;
     overflow-y: scroll;
 
@@ -303,12 +311,13 @@ onMounted(() => {
       position: sticky;
       top: 0px;
       width: 100%;
+      height: 52px;
       padding: 5px 55px 5px 25px;
       background-color: black;
 
       .search {
         position: relative;
-        color: #71767b;
+        color: $lightGrey;
         font-size: 2rem;
 
         .icon {
@@ -322,7 +331,7 @@ onMounted(() => {
           padding: 12px 50px;
           border-radius: 32px;
           background-color: #202327;
-          color: #71767b;
+          color: $lightGrey;
           font-size: 1.6rem;
           line-height: 1.6rem;
           border: none;
@@ -344,8 +353,8 @@ onMounted(() => {
         padding: 10px 20px;
         row-gap: 8px;
         border-radius: 16px;
-        background-color: #16181c;
-        color: #e7e9ea;
+        background-color: $darkGrey;
+        color: $white;
         font-weight: bold;
 
         .title {
@@ -357,17 +366,17 @@ onMounted(() => {
         }
 
         .subscribe-button {
-          background-color: #1b8bd6;
+          background-color: $blueTwitter;
           padding: 10px 20px;
           font-size: 1.5rem;
-          color: #e7e9ea;
+          color: $white;
           font-weight: bold;
           border: none;
           border-radius: 32px;
           cursor: pointer;
 
           &:hover {
-            background-color: #1685cf;
+            background-color: $darkBlueTwitter;
             transform: background-color ease-in 0.3s;
           }
         }
@@ -377,18 +386,18 @@ onMounted(() => {
         display: flex;
         flex-direction: column;
         border-radius: 16px;
-        background-color: #16181c;
+        background-color: $darkGrey;
 
         .title {
           font-weight: bold;
           padding: 10px 20px 5px;
-          color: #e7e9ea;
+          color: $white;
         }
 
         .trend {
           display: flex;
           padding: 15px 20px;
-          color: #71767b;
+          color: $lightGrey;
           transition: background-color ease-in 0.2s;
           cursor: pointer;
 
@@ -401,7 +410,7 @@ onMounted(() => {
             .name {
               font-size: 1.5rem;
               font-weight: bold;
-              color: #e7e9ea;
+              color: $white;
             }
           }
 
@@ -423,12 +432,12 @@ onMounted(() => {
         display: flex;
         flex-direction: column;
         border-radius: 16px;
-        background-color: #16181c;
+        background-color: $darkGrey;
 
         .title {
           font-weight: bold;
           padding: 10px 20px 5px;
-          color: #e7e9ea;
+          color: $white;
         }
 
         .user {
@@ -437,7 +446,7 @@ onMounted(() => {
           gap: 10px;
           padding: 12px 20px;
           font-size: 1.3rem;
-          color: #71767b;
+          color: $lightGrey;
           transition: background-color ease-in 0.2s;
           cursor: pointer;
 
@@ -451,14 +460,14 @@ onMounted(() => {
             .display-name {
               font-size: 1.5rem;
               font-weight: bold;
-              color: #e7e9ea;
+              color: $white;
             }
           }
 
           .follow-button {
             margin-left: auto;
-            background-color: #e7e9ea;
-            color: #202327;
+            background-color: $white;
+            color: $grey;
             padding: 5px 10px;
             font-size: 1.5rem;
             border: none;
@@ -466,7 +475,7 @@ onMounted(() => {
           }
 
           &:hover {
-            background-color: #202327;
+            background-color: $grey;
           }
 
           &:last-child {
@@ -476,7 +485,7 @@ onMounted(() => {
       }
 
       .footer {
-        color: #71767b;
+        color: $lightGrey;
         display: flex;
         flex-wrap: wrap;
         column-gap: 20px;

@@ -17,3 +17,10 @@ export interface ITrend {
   url: string;
   tweet_volume: number | null;
 }
+
+export interface ITweet {
+  author: IUser;
+  timestamp: Date;
+  body: string;
+  picture?: string;
+}
