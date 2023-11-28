@@ -24,3 +24,10 @@ export interface ITweet {
   body: string;
   picture?: string;
 }
+
+export interface rawTweet {
+  author: string;
+  timestamp: string;
+  body: string;
+  picture?: string;
+}
