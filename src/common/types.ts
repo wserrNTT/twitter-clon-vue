@@ -23,6 +23,10 @@ export interface ITweet {
   timestamp: Date;
   body: string;
   picture?: string;
+  comments: string;
+  reposts: string;
+  likes: string;
+  views: string;
 }
 
 export interface rawTweet {
@@ -30,4 +34,8 @@ export interface rawTweet {
   timestamp: string;
   body: string;
   picture?: string;
+  comments: string;
+  reposts: string;
+  likes: string;
+  views: string;
 }

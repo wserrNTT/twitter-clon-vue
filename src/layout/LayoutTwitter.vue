@@ -142,6 +142,7 @@ onMounted(() => {
   </div>
 </template>
 <style lang="scss" scoped>
+@import "@/assets/mixins";
 $blueTwitter: #1b8bd6;
 $darkBlueTwitter: #1685cf;
 
@@ -155,13 +156,18 @@ $white: #e7e9ea;
   display: grid;
   grid-template-columns: 315px auto 440px;
   height: 100vh;
+  overflow-y: scroll;
 
   .main-sidebar {
+    position: sticky;
+    top: 0;
     display: flex;
     flex-direction: column;
     padding: 15px;
     border-right: 1px solid $grey;
     padding-left: 50px;
+    max-height: 100vh;
+    z-index: 2;
 
     .item-list {
       font-size: 2.2rem;
@@ -303,9 +309,12 @@ $white: #e7e9ea;
   }
 
   .right-sidebar {
+    position: sticky;
+    top: 0px;
     border-left: 1px solid $grey;
-    max-height: 100vh;
+    height: 100vh;
     overflow-y: scroll;
+    @include hideScrollbar;
 
     .search-container {
       position: sticky;

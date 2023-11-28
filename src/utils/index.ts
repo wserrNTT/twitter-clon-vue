@@ -16,10 +16,9 @@ export const updateDocumentTitle = (newTitle: string) =>
 // Parses raw tweets to ITweet
 export const loadTweets = (tweets: rawTweet[], users: IUser[]) => {
   return tweets.map<ITweet>((tweet) => ({
+    ...tweet,
     author:
       users.find((user) => user.username === tweet.author) ?? users[0],
-    timestamp: new Date(tweet.timestamp),
-    body: tweet.body,
-    picture: tweet.picture
+    timestamp: new Date(tweet.timestamp)
   }));
 };
