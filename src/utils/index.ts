@@ -17,8 +17,8 @@ export const updateDocumentTitle = (newTitle: string) =>
 export const loadTweets = (tweets: rawTweet[], users: IUser[]) => {
   return tweets.map<ITweet>((tweet) => ({
     ...tweet,
-    author:
-      users.find((user) => user.username === tweet.author) ?? users[0],
+    author: users.find((user) => user.id === tweet.authorID) ?? users[0],
     timestamp: new Date(tweet.timestamp)
   }));
 };
+

@@ -1,17 +1,19 @@
 {
   "tweets": [
     {
-      "author": "goldenrabbit802",
-      "timestamp": "November 26, 2023 22:02:32",
-      "body": "Dios te pedí una cena, no un banquete",
-      "picture": "https://pbs.twimg.com/media/F_6LdaGXgAAFP-U?format=jpg&name=small",
+      "id": 0,
+      "authorID": 0,
+      "timestamp": "November 27, 2023 16:00:00",
+      "body": "Neil Druckmann on a potential The Last of Us Part 3:\n\"The Last of Us is obviously a world I love deeply and know our studio and fans do as well, but I have no comment at this moment on the series’ future beyond our focus on The Last of Us Part II Remastered, we have other projects in the works at Naughty Dog.\"",
+      "picture": "https://pbs.twimg.com/media/GAB8xQqWYAA9WXI?format=jpg&name=large",
       "comments": 187,
       "reposts": 253,
       "likes": 514,
       "views": 1809
     },
     {
-      "author": "porquetendencia",
+      "id": 1,
+      "authorID": 17,
       "timestamp": "November 26, 2023 20:05:21",
       "body": "\"Bill Clinton\":\nPor su reunión con Javier Milei",
       "picture": "https://pbs.twimg.com/media/F_-dKN8XQAAGhMr?format=jpg&name=large",
@@ -21,7 +23,8 @@
       "views": 1712
     },
     {
-      "author": "zofycasper",
+      "id": 2,
+      "authorID": 18,
       "timestamp": "November 26, 2023 19:46:07",
       "body": "Who controls the memes, controls the universe.\n\nIf we don’t make more memes, the people we hate will.",
       "comments": 150,
@@ -30,7 +33,8 @@
       "views": 109
     },
     {
-      "author": "IGN",
+      "id": 3,
+      "authorID": 19,
       "timestamp": "November 27, 2023 07:46:27",
       "body": "More people are playing Red Dead Redemption 2 on Steam now than ever before.",
       "picture": "https://pbs.twimg.com/media/F_8Q6nYWcAAizCP?format=jpg&name=large",

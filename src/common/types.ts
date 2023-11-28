@@ -4,6 +4,7 @@ export interface ILogin {
 }
 
 export interface IUser {
+  id: number;
   username: string;
   displayname: string;
   profilePicture: string;
@@ -19,23 +20,25 @@ export interface ITrend {
 }
 
 export interface ITweet {
+  id: number;
   author: IUser;
   timestamp: Date;
   body: string;
   picture?: string;
-  comments: string;
-  reposts: string;
-  likes: string;
-  views: string;
+  comments: number;
+  reposts: number;
+  likes: number;
+  views: number;
 }
 
 export interface rawTweet {
-  author: string;
+  id: number;
+  authorID: number;
   timestamp: string;
   body: string;
   picture?: string;
-  comments: string;
-  reposts: string;
-  likes: string;
-  views: string;
+  comments: number;
+  reposts: number;
+  likes: number;
+  views: number;
 }
