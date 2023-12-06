@@ -4,7 +4,7 @@ import { useRouter } from "vue-router";
 import { useLoginStore } from "@/store/login.store";
 import { Icon } from "@iconify/vue"
 
-import LoginComponent from "@/components/LoginComponent.vue";
+import Login from "@/components/Login.vue";
 
 const router = useRouter();
 const loginStore = useLoginStore();
@@ -77,16 +77,18 @@ const showLogin = ref(false)
       <span>© 2023 X Corp</span>
     </footer>
   </div>
-  <LoginComponent v-if="showLogin" @close="showLogin = false" />
+  <Login v-if="showLogin" @close="showLogin = false" />
 </template>
 
 <style lang="scss" scoped>
+@import '@/assets/mixins.scss';
+
 .register-container {
   display: grid;
-  grid-template-columns: auto 760px;
+  grid-template-columns: 40% 60%;
   grid-template-rows: auto 80px;
   height: 100%;
-
+  overflow-x: hidden;
   .x-container {
     display: flex;
     justify-content: center;
@@ -94,7 +96,7 @@ const showLogin = ref(false)
     min-width: 140px;
 
     .icon {
-      width: clamp(130px, 80%, 350px);
+      width: 60%;
       height: auto;
     }
   }
@@ -102,35 +104,35 @@ const showLogin = ref(false)
   .info-container {
     display: flex;
     flex-direction: column;
-    row-gap: 10px;
+    row-gap: 50px;
     justify-content: center;
     align-items: flex-start;
     padding: 0 30% 0 50px;
     color: #e7e9ea;
 
     h2 {
-      font-size: 5rem;
+      font-size: 8rem;
     }
 
     h3 {
-      font-size: 3rem;
+      font-size: 5rem;
     }
 
     h4 {
-      font-size: 1.5rem;
+      font-size: 3rem;
     }
 
     .buttons-container {
       display: flex;
       flex-direction: column;
-      gap: 10px;
-      width: clamp(260px, 50%, 450px);
+      gap: 20px;
+      width: clamp(260px, 60%, 450px);
 
       button {
         border: none;
         border-radius: 32px;
-        padding: 10px 15px;
-        font-size: 1.4rem;
+        padding: 20px;
+        font-size: 2.2rem;
         font-weight: bold;
         display: flex;
         justify-content: center;
@@ -138,16 +140,19 @@ const showLogin = ref(false)
         column-gap: 5px;
         cursor: pointer;
       }
-
+      .icon {
+        font-size: 2.4rem;
+      }
       .separator {
         display: flex;
-        font-size: 1.2rem;
+        font-size: 2.2rem;
+        line-height: 1rem;
 
         .line {
           flex: auto;
-          margin: 0 5px;
+          margin: 0 10px;
           border-bottom: solid 1px #2f3336;
-          transform: translateY(-45%);
+          transform: translateY(-30%);
         }
       }
 
@@ -168,6 +173,7 @@ const showLogin = ref(false)
 
       .terms {
         color: #71767b;
+        font-size: 1.6rem;
 
         .highlighted {
           color: #1d9bf0;
@@ -186,8 +192,6 @@ const showLogin = ref(false)
       .login-button {
         border: solid 1px #71767b;
         border-radius: 32px;
-        padding: 10px 15px;
-        font-size: 1.4rem;
         font-weight: bold;
         align-self: stretch;
         background-color: transparent;
@@ -201,8 +205,6 @@ const showLogin = ref(false)
     }
   }
 
-
-
   footer {
     margin-top: auto;
     grid-column: 1 / span 2;
@@ -212,7 +214,7 @@ const showLogin = ref(false)
     row-gap: 5px;
     column-gap: 20px;
     padding: 10px 40px;
-    font-size: 1.2rem;
+    font-size: 1.8rem;
     color: #71767b;
 
     a {
@@ -226,7 +228,85 @@ const showLogin = ref(false)
     }
   }
 }
+@media screen and (max-width: 1900px) {
+  .register-container {
+    .info-container {
+      gap: 30px;
+      h2 {
+        font-size: 6rem;
+      }
 
+      h3 {
+        font-size: 4rem;
+      }
+
+      h4 {
+        font-size: 2rem;
+      }
+      .buttons-container {
+        gap: 10px;
+        width: clamp(260px, 60%, 350px);
+
+        button {
+          padding: 15px;
+          font-size: 1.5rem;
+        }
+        .icon {
+          font-size: 2rem;
+        }
+        .separator {
+          font-size: 2rem;
+          line-height: 1rem;
+        }
+        .terms {
+          font-size: 1.2rem;
+        }
+      }
+    }
+    footer {
+      font-size: 1.5rem;
+    }
+  }
+}
+@media screen and (max-width: 1360px) {
+  .register-container {
+    .info-container {
+      gap: 30px;
+      h2 {
+        font-size: 5rem;
+      }
+
+      h3 {
+        font-size: 3rem;
+      }
+
+      h4 {
+        font-size: 1.5rem;
+      }
+      .buttons-container {
+        width: clamp(260px, 50%, 450px);
+
+        button {
+          padding: 10px;
+          font-size: 1.4rem;
+        }
+        .icon {
+          font-size: 1.6rem;
+        }
+        .separator {
+          font-size: 1.4rem;
+          line-height: 1rem;
+        }
+        .terms {
+          font-size: 1rem;
+        }
+      }
+    }
+    footer {
+      font-size: 1.2rem;
+    }
+  }
+}
 @media screen and (max-width: 1000px) {
   .register-container {
     grid-template-columns: 1fr;
@@ -262,7 +342,6 @@ const showLogin = ref(false)
   }
 }
 
-
 @media screen and (max-width: 520px) {
   .register-container {
     padding: 40px;
@@ -290,4 +369,5 @@ const showLogin = ref(false)
     }
   }
 }
+
 </style> 

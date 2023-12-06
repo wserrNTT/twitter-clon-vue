@@ -1,44 +1,38 @@
 export interface ILogin {
-  data: IUser | null;
+  data: IUser;
   isLoggedIn: boolean;
+  error: string;
 }
 
 export interface IUser {
-  id: number;
-  username: string;
-  displayname: string;
+  _id: string;
+  userName: string;
+  displayName: string;
   profilePicture: string;
-  following: number;
-  followers: number;
-  isFollowing?: boolean;
+  following: IUser[];
+  followers: IUser[];
 }
 
-export interface ITrend {
+export interface IHashtag {
   name: string;
-  url: string;
-  tweet_volume: number | null;
+  tweet_volume?: ITweet[];
 }
 
 export interface ITweet {
-  id: number;
+  _id: string;
   author: IUser;
-  timestamp: Date;
+  timeStamp: string;
   body: string;
   picture?: string;
-  comments: number;
-  reposts: number;
-  likes: number;
-  views: number;
+  comments: ITweet[];
+  reposts: IUser[];
+  likes: IUser[];
+  views: IUser[];
 }
 
 export interface rawTweet {
-  id: number;
-  authorID: number;
-  timestamp: string;
+  author: string;
+  timeStamp: string;
   body: string;
   picture?: string;
-  comments: number;
-  reposts: number;
-  likes: number;
-  views: number;
 }

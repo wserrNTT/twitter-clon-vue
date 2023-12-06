@@ -1,19 +1,15 @@
 <script lang="ts" setup>
-// Vue
-import { onMounted } from "vue";
 // Pinia
-import { useLoginStore } from "@/store/login.store";
+import { useLoginStore } from '@/store/login.store';
 // Vue-router
-import { useRoute } from "vue-router"
-// Utils
-import { updateDocumentTitle } from "@/utils"
+import { useRoute } from 'vue-router';
+// Composables
+import { useTitle } from '@/composables';
 
-const route = useRoute()
+const route = useRoute();
 const loginStore = useLoginStore();
 
-onMounted(() => {
-  updateDocumentTitle(`Listas creadas por @${loginStore.getUsername} / X`)
-})
+useTitle(`Listas creadas por @${loginStore.data.userName} / X`);
 </script>
 
 <template>

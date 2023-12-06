@@ -1,39 +1,43 @@
 <script lang="ts" setup>
 import { ITweet } from '@/common/types';
-import { Icon } from "@iconify/vue"
+import { Icon } from '@iconify/vue';
 
-defineProps<{ tweet: ITweet }>()
+defineProps<{ tweet: ITweet }>();
 
-// returns amount of hours since Date
-const toHours = (date: Date) => {
-  const currentTime = new Date().valueOf()
-  const seconds = (currentTime - date.valueOf()) / 1000
-  console.log(seconds);
+// Formats timestamp
+const formatDate = (date: string) => {
+  const dateConverted = new Date(date);
+  const currentTime = new Date().valueOf();
+  const seconds = (currentTime - dateConverted.valueOf()) / 1000;
   // format in case of seconds
-  if (seconds <= 60) return `${Math.floor(seconds)}s`
+  if (seconds <= 60) return `${Math.floor(seconds)}s`;
   // format in case of minutes
-  if (seconds <= 3600) return `${Math.floor(seconds / 60)}m`
-  // format in case of minutes
-  if (seconds <= 86400) return `${Math.floor(seconds / 1440)}h`
-  return date.toLocaleString('default', { day: '2-digit', month: 'short' }).replace("-", " ")
-}
+  if (seconds <= 3600) return `${Math.floor(seconds / 60)}m`;
+  // format in case of hours
+  if (seconds <= 86400) return `${Math.floor(seconds / 3600)}h`;
+  return dateConverted
+    .toLocaleString('default', { day: '2-digit', month: 'short' })
+    .replace('-', ' ');
+};
 </script>
 
 <template>
   <div class="tweet">
     <div class="profile-container">
-      <img :src="tweet.author.profilePicture" :alt="`profile picture of ${tweet.author.displayname}`">
+      <img
+        :src="tweet.author.profilePicture"
+        :alt="`profile picture of ${tweet.author.displayName}`"
+      />
     </div>
     <div class="data">
       <div class="user-data">
         <p class="display-name">
-          {{ tweet.author.displayname }}
+          {{ tweet.author.displayName }}
         </p>
-        <p class="user-name">
-          @{{ tweet.author.username }}
-        </p>·
+        <p class="user-name">@{{ tweet.author.userName }}</p>
+        ·
         <p class="timestamp">
-          {{ toHours(tweet.timestamp) }}
+          {{ formatDate(tweet.timeStamp) }}
         </p>
         <div class="options">
           <Icon icon="mi:options-horizontal" class="icon" />
@@ -41,29 +45,29 @@ const toHours = (date: Date) => {
       </div>
       <div class="tweet-body">
         {{ tweet.body }}
-        <img class="picture" :src="tweet.picture" alt="" v-if="tweet.picture">
+        <img class="picture" :src="tweet.picture" alt="" v-if="tweet.picture" />
       </div>
       <div class="interactions">
         <div class="interaction comments">
           <Icon class="icon" icon="majesticons:comment-2-line" />
-          {{ tweet.comments }}
+          {{ tweet.comments?.length }}
         </div>
         <div class="interaction reposts">
           <Icon class="icon" icon="bx:repost" />
-          {{ tweet.reposts }}
+          {{ tweet.reposts?.length }}
         </div>
         <div class="interaction likes">
           <Icon class="icon" icon="mdi:heart-outline" />
-          {{ tweet.likes }}
+          {{ tweet.likes?.length }}
         </div>
         <div class="interaction views">
           <Icon class="icon" icon="ion:stats-chart" />
-          {{ tweet.views }}
+          {{ tweet.views?.length }}
         </div>
-        <div class=" save">
+        <div class="save">
           <Icon class="icon" icon="akar-icons:ribbon" />
         </div>
-        <div class=" share">
+        <div class="share">
           <Icon class="icon" icon="fluent:share-ios-24-filled" />
         </div>
       </div>
@@ -94,11 +98,11 @@ $white: #e7e9ea;
       width: 40px;
       height: 40px;
       border-radius: 50%;
-
     }
   }
 
   .data {
+    flex: auto;
     .user-data {
       display: flex;
       gap: 5px;
@@ -194,7 +198,6 @@ $white: #e7e9ea;
       }
 
       .views {
-
         &:hover {
           color: $blueTwitter;
 
@@ -209,7 +212,6 @@ $white: #e7e9ea;
         display: flex;
         align-items: center;
         cursor: pointer;
-
 
         .icon {
           padding: 10px;
@@ -227,4 +229,5 @@ $white: #e7e9ea;
     }
   }
 }
+
 </style>

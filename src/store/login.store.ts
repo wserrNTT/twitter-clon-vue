@@ -3,26 +3,35 @@ import { defineStore } from 'pinia';
 // Types
 import type { ILogin, IUser } from '@/common/types';
 
+const defaultUser: IUser = {
+  _id: '',
+  displayName: '',
+  userName: '',
+  followers: [],
+  following: [],
+  profilePicture: ''
+};
+
 export const useLoginStore = defineStore('loginStore', {
   state: () =>
     ({
-      data: null,
-      isLoggedIn: false
+      data: defaultUser,
+      isLoggedIn: false,
+      error: ''
     } as ILogin),
-  getters: {
-    getUsername: (state) => state.data?.username,
-    getDisplayname: (state) => state.data?.displayname,
-    getProfilePicture: (state) => state.data?.profilePicture,
-    getLogged: (state) => state.isLoggedIn
-  },
   actions: {
+    setError(payload: string) {
+      this.error = payload;
+    },
     login(payload: IUser) {
       this.data = payload;
       this.isLoggedIn = true;
+      this.error = '';
     },
     logout() {
+      this.data = defaultUser;
       this.isLoggedIn = false;
-      this.data = null;
+      this.error = '';
     }
   }
 });

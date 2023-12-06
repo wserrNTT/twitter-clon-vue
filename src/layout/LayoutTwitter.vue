@@ -1,23 +1,31 @@
 <script lang="ts" setup>
 // Vue
-import { onMounted, ref } from "vue"
+import { onMounted, ref } from 'vue';
 // Pinia
-import { useLoginStore } from "@/store/login.store";
-import { useSampleStore } from "@/store/sample.store";
+import { useLoginStore } from '@/store/login.store';
+import { useUserStore } from '@/store/user.store';
+import { useHashtagStore } from '@/store/hashtag.store';
+
 // Router
-import { RouterLink, useRouter, useRoute } from "vue-router";
+import { RouterLink, useRouter, useRoute } from 'vue-router';
 // Icons
-import { Icon } from "@iconify/vue"
+import { Icon } from '@iconify/vue';
+
+// img
+import defaultProfilePicture from '@/assets/img/default_profile.png';
 
 const loginStore = useLoginStore();
-const sampleStore = useSampleStore();
+const userStore = useUserStore();
+const hashtagStore = useHashtagStore();
 
-const router = useRouter()
+const router = useRouter();
 const route = useRoute();
-const showMenu = ref(false)
+const showMenu = ref(false);
 onMounted(() => {
-  if (!loginStore.$state.isLoggedIn) router.push({ name: 'register' })
-})
+  if (!loginStore.$state.isLoggedIn) router.push({ name: 'register' });
+  userStore.fetchUsers();
+  hashtagStore.fetchHashtags();
+});
 </script>
 
 <template>
@@ -28,36 +36,74 @@ onMounted(() => {
           <Icon class="icon" icon="simple-icons:x" />
         </router-link>
         <router-link :to="{ name: 'home' }" class="item">
-          <Icon class="icon" :icon="route.name === 'home' ? 'material-symbols:home' : 'material-symbols:home-outline'" />
-          <p class="text" :class="{ 'bold': route.name === 'home' }">Inicio</p>
+          <Icon
+            class="icon"
+            :icon="
+              route.name === 'home'
+                ? 'material-symbols:home'
+                : 'material-symbols:home-outline'
+            "
+          />
+          <p class="text" :class="{ bold: route.name === 'home' }">Inicio</p>
         </router-link>
         <router-link :to="{ name: 'explore' }" class="item">
-          <Icon class="icon" :icon="route.name === 'explore' ? 'iconamoon:search-bold' : 'iconamoon:search'" />
-          <p class="text" :class="{ 'bold': route.name === 'explore' }">Explorar</p>
+          <Icon
+            class="icon"
+            :icon="
+              route.name === 'explore' ? 'iconamoon:search-bold' : 'iconamoon:search'
+            "
+          />
+          <p class="text" :class="{ bold: route.name === 'explore' }">Explorar</p>
         </router-link>
         <router-link :to="{ name: 'notifications' }" class="item">
-          <Icon class="icon" :icon="route.name === 'notifications' ? 'ph:bell-fill' : 'ph:bell-light'" />
-          <p class="text" :class="{ 'bold': route.name === 'notifications' }">Notificaciones</p>
+          <Icon
+            class="icon"
+            :icon="route.name === 'notifications' ? 'ph:bell-fill' : 'ph:bell-light'"
+          />
+          <p class="text" :class="{ bold: route.name === 'notifications' }">
+            Notificaciones
+          </p>
         </router-link>
         <router-link :to="{ name: 'messages' }" class="item">
-          <Icon class="icon"
-            :icon="route.name === 'messages' ? 'teenyicons:envelope-solid' : 'teenyicons:envelope-outline'" />
-          <p class="text" :class="{ 'bold': route.name === 'messages' }">Mensajes</p>
+          <Icon
+            class="icon"
+            :icon="
+              route.name === 'messages'
+                ? 'teenyicons:envelope-solid'
+                : 'teenyicons:envelope-outline'
+            "
+          />
+          <p class="text" :class="{ bold: route.name === 'messages' }">Mensajes</p>
         </router-link>
-        <router-link :to="{ name: 'lists', params: { id: loginStore.getUsername } }" class="item"
-          v-if="loginStore.getLogged">
-          <Icon class="icon"
-            :icon="route.name === 'lists' ? 'fluent:document-one-page-24-filled' : 'fluent:document-one-page-24-regular'" />
-          <p class="text" :class="{ 'bold': route.name === 'lists' }">Listas</p>
+        <router-link
+          :to="{ name: 'lists', params: { id: loginStore.data._id } }"
+          class="item"
+          v-if="loginStore.isLoggedIn"
+        >
+          <Icon
+            class="icon"
+            :icon="
+              route.name === 'lists'
+                ? 'fluent:document-one-page-24-filled'
+                : 'fluent:document-one-page-24-regular'
+            "
+          />
+          <p class="text" :class="{ bold: route.name === 'lists' }">Listas</p>
         </router-link>
         <div class="item">
           <Icon class="icon" icon="simple-icons:x" />
           <p class="text">Premium</p>
         </div>
-        <router-link :to="{ name: 'profile', params: { id: loginStore.getUsername } }" class="item"
-          v-if="loginStore.getLogged">
-          <Icon class="icon" :icon="route.name === 'profile' ? 'heroicons:user-solid' : 'heroicons:user'" />
-          <p class="text" :class="{ 'bold': route.name === 'profile' }">Perfil</p>
+        <router-link
+          :to="{ name: 'profile', params: { id: loginStore.data.userName } }"
+          class="item"
+          v-if="loginStore.isLoggedIn"
+        >
+          <Icon
+            class="icon"
+            :icon="route.name === 'profile' ? 'heroicons:user-solid' : 'heroicons:user'"
+          />
+          <p class="text" :class="{ bold: route.name === 'profile' }">Perfil</p>
         </router-link>
         <div class="item">
           <Icon class="icon" icon="tabler:dots-circle-horizontal" />
@@ -68,17 +114,28 @@ onMounted(() => {
           <p class="text">Postear</p>
         </div>
       </div>
-      <div class="user" :class="{ hover: !showMenu }" v-if="loginStore.getLogged" @click="() => showMenu = true">
-        <img :src="loginStore.getProfilePicture" alt="" class="user-pfp">
+      <div
+        class="user"
+        :class="{ hover: !showMenu }"
+        v-if="loginStore.isLoggedIn"
+        @click="showMenu = true"
+      >
+        <img
+          :src="loginStore.data?.profilePicture || defaultProfilePicture"
+          :alt="`${loginStore.data.displayName}'s profile picure'`"
+          class="user-pfp"
+        />
         <div class="user-info">
-          <span class="display-name">{{ loginStore.getDisplayname }}</span>
-          <span class="user-name">@{{ loginStore.getUsername }}</span>
+          <span class="display-name">{{ loginStore.data.displayName }}</span>
+          <span class="user-name">@{{ loginStore.data.userName }}</span>
         </div>
         <Icon icon="mi:options-horizontal" class="icon" />
         <div class="submenu" v-if="showMenu">
           <div class="items">
             <p class="item">Agregar una cuenta existente</p>
-            <p class="item" @click="router.push({ name: 'logout' })">Cerrar la sesión de @{{ loginStore.getUsername }}</p>
+            <p class="item" @click="router.push({ name: 'logout' })">
+              Cerrar la sesión de @{{ loginStore.data.userName }}
+            </p>
           </div>
         </div>
       </div>
@@ -87,62 +144,82 @@ onMounted(() => {
     <aside class="right-sidebar" v-if="route.name !== 'messages'">
       <div class="search-container">
         <div class="search">
-          <Icon class="icon" icon="iconamoon:search" /> <input class="input-search" type="text" placeholder="Buscar">
+          <Icon class="icon" icon="iconamoon:search" />
+          <input class="input-search" type="text" placeholder="Buscar" />
         </div>
       </div>
       <div class="sidebar-items">
-        <div class=" premium" v-if="['home'].includes(route.name as string)">
-          <p class="title">Suscríbete a Premium
-          </p>
+        <div class="premium" v-if="['home'].includes(route.name as string)">
+          <p class="title">Suscríbete a Premium</p>
           <p class="body">
-            Suscríbete para desbloquear nuevas funciones y, si eres elegible, recibir un pago de cuota de ingresos por
-            anuncios.
+            Suscríbete para desbloquear nuevas funciones y, si eres elegible, recibir un
+            pago de cuota de ingresos por anuncios.
           </p>
           <button type="button" class="subscribe-button">Suscribirse</button>
         </div>
-        <div class=" trends" v-if="['home', 'notifications', 'lists', 'profile'].includes(route.name as string)">
+        <div
+          class="trends"
+          v-if="['home', 'notifications', 'lists', 'profile'].includes(route.name as string)"
+        >
           <p class="title">Tendencias para ti</p>
-          <div class="trend" v-for="trend in sampleStore.getRandomTrends">
+          <div class="trend" v-for="hashtag in hashtagStore.getRandomHashtags">
             <div class="info">
               <p class="header">Tendencia</p>
-              <p class="name">{{ trend.name }}</p>
-              <p class="volume" v-if="trend.tweet_volume">{{ trend.tweet_volume }} posts</p>
+              <p class="name">{{ hashtag.name }}</p>
+              <p class="volume" v-if="hashtag.tweet_volume?.length">
+                {{ hashtag.tweet_volume.length }} posts
+              </p>
             </div>
             <div class="options">
               <Icon icon="mi:options-horizontal" class="icon" />
             </div>
           </div>
         </div>
-        <div class=" follow"
-          v-if="['home', 'explore', 'notifications', 'lists', 'profile'].includes(route.name as string)">
-          <p class="title">{{ route.name === 'profile' ? 'Tal vez te guste' : 'A quién seguir' }}</p>
-          <div class="user" v-for="user in sampleStore.getRandomUsers">
-            <img class="profile-picture" :src="user.profilePicture" :alt="user.displayname">
+        <div
+          class="follow"
+          v-if="['home', 'explore', 'notifications', 'lists', 'profile'].includes(route.name as string)"
+        >
+          <p class="title">
+            {{ route.name === 'profile' ? 'Tal vez te guste' : 'A quién seguir' }}
+          </p>
+          <div class="user" v-for="user in userStore.getRandomUsers">
+            <img
+              class="profile-picture"
+              :src="user.profilePicture"
+              :alt="user.displayName"
+            />
             <div class="info">
-              <p class="display-name">{{ user.displayname }}</p>
-              <p class="user-name">@{{ user.username }}</p>
+              <p class="display-name">{{ user.displayName }}</p>
+              <p class="user-name">@{{ user.userName }}</p>
             </div>
             <button class="follow-button">Seguir</button>
           </div>
         </div>
-        <div class=" footer">
+        <div class="footer">
           <a class="link" href="https://twitter.com/tos">Condiciones de Servicio</a>
           <a class="link" href="https://twitter.com/privacy">Política de Privacidad</a>
-          <a class="link" href="https://support.twitter.com/articles/20170514">Política de cookies</a>
-          <a class="link" href="https://help.twitter.com/resources/accessibility">Accesibilidad</a>
-          <a class="link"
-            href="https://business.twitter.com/en/help/troubleshooting/how-twitter-ads-work.html?ref=web-twc-ao-gbl-adsinfo&utm_source=twc&utm_medium=web&utm_campaign=ao&utm_content=adsinfo">Información
-            de anuncios</a>
+          <a class="link" href="https://support.twitter.com/articles/20170514"
+            >Política de cookies</a
+          >
+          <a class="link" href="https://help.twitter.com/resources/accessibility"
+            >Accesibilidad</a
+          >
+          <a
+            class="link"
+            href="https://business.twitter.com/en/help/troubleshooting/how-twitter-ads-work.html?ref=web-twc-ao-gbl-adsinfo&utm_source=twc&utm_medium=web&utm_campaign=ao&utm_content=adsinfo"
+            >Información de anuncios</a
+          >
           <span class="link">Más opciones...</span>
           <span class="link">© 2023 X Corp.</span>
         </div>
       </div>
     </aside>
-    <div class="background" v-if="showMenu" @click="() => showMenu = false"></div>
+    <div class="background" v-if="showMenu" @click="() => (showMenu = false)"></div>
   </div>
 </template>
 <style lang="scss" scoped>
-@import "@/assets/mixins";
+@import '@/assets/mixins';
+@import '@/assets/mixins';
 $blueTwitter: #1b8bd6;
 $darkBlueTwitter: #1685cf;
 
@@ -154,7 +231,8 @@ $white: #e7e9ea;
 .layout-container {
   color: $white;
   display: grid;
-  grid-template-columns: 315px auto 440px;
+  grid-template-columns: 315px 550px 440px;
+  justify-content: center;
   height: 100vh;
   overflow-y: scroll;
 
@@ -173,6 +251,7 @@ $white: #e7e9ea;
       font-size: 2.2rem;
       display: flex;
       flex-direction: column;
+      row-gap: 10px;
       align-items: flex-start;
       list-style: none;
 
@@ -277,15 +356,14 @@ $white: #e7e9ea;
         z-index: 2;
 
         &::after {
-          content: "";
+          content: '';
           position: absolute;
           bottom: -5px;
           left: calc(50% - 5px);
           width: 10px;
           height: 10px;
           background-color: #000000;
-          box-shadow:
-            rgba(255, 255, 255, 0.15) 2px 2px 2px 1px;
+          box-shadow: rgba(255, 255, 255, 0.15) 2px 2px 2px 1px;
           transform: rotate(45deg);
         }
 
@@ -526,13 +604,14 @@ $white: #e7e9ea;
 
 @media screen and (max-width: 1200px) {
   .layout-container {
-    grid-template-columns: 90px auto 300px;
+    grid-template-columns: 90px 450px min-content;
 
     .main-sidebar {
       padding: 10px 5px;
 
       .item-list {
         align-items: center;
+        row-gap: 0px;
 
         .item {
           padding: 10px;
@@ -567,6 +646,19 @@ $white: #e7e9ea;
         .icon {
           display: none;
         }
+        .submenu {
+          position: absolute;
+          bottom: calc(100% + 12px);
+          left: 0;
+          padding: 12px 0;
+          width: 280px;
+
+          &::after {
+            content: '';
+            bottom: -5px;
+            left: 30px;
+          }
+        }
       }
     }
   }
@@ -575,6 +667,7 @@ $white: #e7e9ea;
 @media screen and (max-width: 1000px) {
   .layout-container {
     grid-template-columns: 90px auto;
+    justify-content: stretch;
 
     .right-sidebar {
       display: none;
